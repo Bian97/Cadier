@@ -108,6 +108,28 @@ namespace CadierBiblioteca.Utilitarios
 
         private PFisica JsonParaPFisica(dynamic item)
         {
+            PJuridica pjuridica = null;
+
+            if (item["p_fisica_presidente"] != null)
+            {
+                pjuridica = new PJuridica() { IdPJuridica = item["IdPJuridica"] != null ? item["IdPJuridica"] : item["p_fisica_presidente"]["IdPJuridica"], Nome = item["p_fisica_presidente"]["Nome"] };
+            } else if(item["p_fisica_presidente"] == null && item["p_juridica"] != null)
+            {
+                pjuridica = new PJuridica()
+                {
+                    IdPJuridica = item["p_juridica"]["IdPJuridica"],
+                    Nome = item["p_juridica"]["Nome"]
+                };
+            } else if(item["p_fisica_presidente"] == null && item["p_juridica"] == null && item["infos_temporarias"] != null)
+            {
+                pjuridica = new PJuridica()
+                {
+                    Nome = item["infos_temporarias"]["NomeIgreja"],
+                    Endereco = new Endereco() { Rua = item["infos_temporarias"]["EnderecoIgreja"] }
+                };
+            }
+
+
             var pfisica = new PFisica()
             {
                 IdPFisica = item["IdPFisica"],
@@ -118,8 +140,8 @@ namespace CadierBiblioteca.Utilitarios
                 Telefone2 = item["Telefone2"],
                 Filiacao = item["Filiacao"],
                 DataNascimento = item["DataNascimento"],
-                Sexo = item["Sexo"] != null ? item["Sexo"] : true,
-                Cargo = (CargosEnum)Convert.ToInt32(item["Cargo"] != null ? item["Cargo"] : 0),
+                Sexo = item["Sexo"] ?? true,
+                Cargo = (CargosEnum)Convert.ToInt32(item["Cargo"] ?? 0),
                 Conjuge = item["Conjuge"],
                 ApresentouConv = item["ApresentouConv"],
                 Foto = item["Foto"],
@@ -149,12 +171,8 @@ namespace CadierBiblioteca.Utilitarios
                     Longitude = item["enderecos"]["Longitude"],
                     Cep = item["enderecos"]["Cep"]
                 } : null,
-                IdPJuridica = item["p_fisica_presidente"] == null ? item["infos_temporarias"] != null ? new PJuridica()
-                {
-                    Nome = item["infos_temporarias"]["NomeIgreja"],
-                    Endereco = new Endereco() { Rua = item["infos_temporarias"]["EnderecoIgreja"] }
-                } : item["p_juridica"] != null ? new PJuridica() { IdPJuridica = item["p_juridica"]["IdPJuridica"], Nome = item["p_juridica"]["Nome"] } : null : new PJuridica() { IdPJuridica = item["IdPJuridica"] != null ? item["IdPJuridica"] : item["p_fisica_presidente"]["IdPJuridica"], Nome = item["p_fisica_presidente"]["Nome"] }
-            };
+                IdPJuridica = pjuridica
+            };            
 
             return pfisica;
         }

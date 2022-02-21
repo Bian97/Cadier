@@ -305,7 +305,8 @@ namespace CadierDesktop
             dateTimeMensalidade.Visible = ordem.DataMensalidade != null && ordem.DataMensalidade.Value.Year != 1970 ? true : false;
             if(ordem.DataMensalidade != null)
             {
-                dateTimeMensalidade.Value = ordem.DataMensalidade.Value;
+                dateTimeMensalidade.Value = new DateTime(ordem.DataMensalidade.Value.Year, ordem.DataMensalidade.Value.Month, 28);
+                dateTimeInicio.Value = new DateTime(ordem.DataMensalidade.Value.Year, ordem.DataMensalidade.Value.Month, 28);
             }
             radioPFisica.Checked = tipo == 0 ? true : false;
             radioPJuridica.Checked = tipo == 1 ? true : false;
@@ -399,6 +400,16 @@ namespace CadierDesktop
                     {
                         List<OrdemServico> ordens = ((List<OrdemServico>)_jsonParaClasse.GetOrdens(jsonOrdem)).ToList();
                         dateTimeInicio.Value = ordens.First().DataMensalidade.Value;
+
+                        if (dateTimeInicio.Value < dateTimeMensalidade.Value)
+                        {
+                            int valorMensal = radioPFisica.Checked ? 9 : 7;
+                            lblValor.Text = "Valor à Acrescentar: " + ((((dateTimeMensalidade.Value.Year - dateTimeInicio.Value.Year) * 12) + dateTimeMensalidade.Value.Month - dateTimeInicio.Value.Month) * valorMensal).ToString();
+                        }
+                        else
+                        {
+                            lblValor.Text = "Valor à Acrescentar: ";
+                        }
                     } else
                     {
                         MessageBoxes.MostraMensagens("Aviso! Este Filiado não possui registros de mensalidades anteriores!", "Aviso!");
@@ -414,9 +425,10 @@ namespace CadierDesktop
 
         private void dateTimeMensalidade_ValueChanged(object sender, EventArgs e)
         {
-            if(dateTimeInicio.Value < dateTimeMensalidade.Value)
+            if (dateTimeInicio.Value < dateTimeMensalidade.Value)
             {
-                lblValor.Text = "Valor à Acrescentar: " + ((((dateTimeMensalidade.Value.Year - dateTimeInicio.Value.Year) * 12) + dateTimeMensalidade.Value.Month - dateTimeInicio.Value.Month) * 9).ToString();
+                int valorMensal = radioPFisica.Checked ? 9 : 7;
+                lblValor.Text = "Valor à Acrescentar: " + ((((dateTimeMensalidade.Value.Year - dateTimeInicio.Value.Year) * 12) + dateTimeMensalidade.Value.Month - dateTimeInicio.Value.Month) * valorMensal).ToString();
             } else
             {
                 lblValor.Text = "Valor à Acrescentar: ";
