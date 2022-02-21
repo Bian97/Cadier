@@ -52,6 +52,9 @@ namespace CadierDesktop
             this.txtEstado = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.btnGerarListaFiliadosAtivos = new System.Windows.Forms.Button();
+            this.btnFiliadosAtivos = new System.Windows.Forms.Button();
+            this.btnFiliadosOutros = new System.Windows.Forms.Button();
+            this.btnFiliadosTodos = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // txtNomeIgreja
@@ -229,7 +232,7 @@ namespace CadierDesktop
             // btnGerarListaFiliadosAtivos
             // 
             this.btnGerarListaFiliadosAtivos.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnGerarListaFiliadosAtivos.Location = new System.Drawing.Point(20, 77);
+            this.btnGerarListaFiliadosAtivos.Location = new System.Drawing.Point(358, 587);
             this.btnGerarListaFiliadosAtivos.Name = "btnGerarListaFiliadosAtivos";
             this.btnGerarListaFiliadosAtivos.Size = new System.Drawing.Size(206, 23);
             this.btnGerarListaFiliadosAtivos.TabIndex = 28;
@@ -237,11 +240,47 @@ namespace CadierDesktop
             this.btnGerarListaFiliadosAtivos.UseVisualStyleBackColor = true;
             this.btnGerarListaFiliadosAtivos.Click += new System.EventHandler(this.btnGerarListaFiliadosAtivos_Click);
             // 
+            // btnFiliadosAtivos
+            // 
+            this.btnFiliadosAtivos.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnFiliadosAtivos.Location = new System.Drawing.Point(20, 77);
+            this.btnFiliadosAtivos.Name = "btnFiliadosAtivos";
+            this.btnFiliadosAtivos.Size = new System.Drawing.Size(164, 23);
+            this.btnFiliadosAtivos.TabIndex = 29;
+            this.btnFiliadosAtivos.Text = "Listar Filiados Ativos";
+            this.btnFiliadosAtivos.UseVisualStyleBackColor = true;
+            this.btnFiliadosAtivos.Click += new System.EventHandler(this.btnFiliadosAtivos_Click);
+            // 
+            // btnFiliadosOutros
+            // 
+            this.btnFiliadosOutros.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnFiliadosOutros.Location = new System.Drawing.Point(190, 77);
+            this.btnFiliadosOutros.Name = "btnFiliadosOutros";
+            this.btnFiliadosOutros.Size = new System.Drawing.Size(168, 23);
+            this.btnFiliadosOutros.TabIndex = 30;
+            this.btnFiliadosOutros.Text = "Listar Filiados Não Ativos";
+            this.btnFiliadosOutros.UseVisualStyleBackColor = true;
+            this.btnFiliadosOutros.Click += new System.EventHandler(this.btnFiliadosOutros_Click);
+            // 
+            // btnFiliadosTodos
+            // 
+            this.btnFiliadosTodos.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnFiliadosTodos.Location = new System.Drawing.Point(364, 77);
+            this.btnFiliadosTodos.Name = "btnFiliadosTodos";
+            this.btnFiliadosTodos.Size = new System.Drawing.Size(164, 23);
+            this.btnFiliadosTodos.TabIndex = 31;
+            this.btnFiliadosTodos.Text = "Listar Todos os Filiados";
+            this.btnFiliadosTodos.UseVisualStyleBackColor = true;
+            this.btnFiliadosTodos.Click += new System.EventHandler(this.btnFiliadosTodos_Click);
+            // 
             // FormListaPFisica
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(924, 611);
+            this.Controls.Add(this.btnFiliadosTodos);
+            this.Controls.Add(this.btnFiliadosOutros);
+            this.Controls.Add(this.btnFiliadosAtivos);
             this.Controls.Add(this.btnGerarListaFiliadosAtivos);
             this.Controls.Add(this.txtEstado);
             this.Controls.Add(this.label5);
@@ -288,5 +327,8 @@ namespace CadierDesktop
         private System.Windows.Forms.TextBox txtEstado;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button btnGerarListaFiliadosAtivos;
+        private System.Windows.Forms.Button btnFiliadosAtivos;
+        private System.Windows.Forms.Button btnFiliadosOutros;
+        private System.Windows.Forms.Button btnFiliadosTodos;
     }
 }

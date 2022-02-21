@@ -25,13 +25,10 @@ namespace CadierDesktop
         public PFisica PFisicaEscolhida { get; set; }
 
         public FormListaPFisica()
-        {            
+        {
             InitializeComponent();
+            DesabilitarCampos();
             _jsonParaClasse = new JsonParaClasse();
-            var jsonPFisicas = TransformaJson(RequisicaoMediador.RealizaRequisicaoGet(@"http://cadier.com.br/api/PFisica"));
-            _pfisicas = ((List<PFisica>)_jsonParaClasse.GetPFisicas(jsonPFisicas)).AsParallel().ToList();
-            radioEFiliado.Checked = true;
-            CarregaLista(_pfisicas);
         }
 
         private dynamic TransformaJson(WebResponse valor)
@@ -53,6 +50,7 @@ namespace CadierDesktop
 
         private void CarregaLista(List<PFisica> pfisicas)
         {
+            HabilitarCampos();
             listViewPFisica.Items.Clear();
             listViewPFisica.View = View.Details;
             listViewPFisica.FullRowSelect = true;
@@ -244,6 +242,67 @@ namespace CadierDesktop
                 .Where(x => x.SituacaoCadastral.EFiliado && x.SituacaoCadastral.Condicao == CondicaoEnum.Ativo).OrderBy(x => x.Nome)
                 .Select(x => x.IdPFisica + " - " + x.Nome));
             ArquivoUtil.GerarArquivoTexto(nomesAtivos);
+        }
+
+        private void btnFiliadosAtivos_Click(object sender, EventArgs e)
+        {
+            MessageBoxes.MostraMensagens("Carregando, clique em OK e aguarde!", "Aviso!");
+            var jsonPFisicas = TransformaJson(RequisicaoMediador.RealizaRequisicaoGet(@"http://cadier.com.br/api/PFisica?tipo=1&status=0"));
+            _pfisicas = ((List<PFisica>)_jsonParaClasse.GetPFisicas(jsonPFisicas)).AsParallel().ToList();
+            radioEFiliado.Checked = true;
+            CarregaLista(_pfisicas);
+            if (_pfisicas != null)
+            {
+                MessageBoxes.MostraMensagens("Carregado com sucesso!", "Aviso!");
+            }
+        }
+
+        private void btnFiliadosOutros_Click(object sender, EventArgs e)
+        {
+            MessageBoxes.MostraMensagens("Carregando, clique em OK e aguarde!", "Aviso!");
+            var jsonPFisicas = TransformaJson(RequisicaoMediador.RealizaRequisicaoGet(@"http://cadier.com.br/api/PFisica?tipo=1&status=1"));
+            _pfisicas = ((List<PFisica>)_jsonParaClasse.GetPFisicas(jsonPFisicas)).AsParallel().ToList();
+            radioEFiliado.Checked = true;
+            CarregaLista(_pfisicas);
+            if (_pfisicas != null)
+            {
+                MessageBoxes.MostraMensagens("Carregado com sucesso!", "Aviso!");
+            }
+        }
+
+        private void btnFiliadosTodos_Click(object sender, EventArgs e)
+        {
+            MessageBoxes.MostraMensagens("Carregando, clique em OK e aguarde!", "Aviso!");
+            var jsonPFisicas = TransformaJson(RequisicaoMediador.RealizaRequisicaoGet(@"http://cadier.com.br/api/PFisica?tipo=0&status=0"));
+            _pfisicas = ((List<PFisica>)_jsonParaClasse.GetPFisicas(jsonPFisicas)).AsParallel().ToList();
+            radioEFiliado.Checked = true;
+            CarregaLista(_pfisicas);
+            if(_pfisicas != null)
+            {
+                MessageBoxes.MostraMensagens("Carregado com sucesso!", "Aviso!");
+            }
+        }
+
+        private void DesabilitarCampos()
+        {
+            txtIdPFisica.Enabled = false;
+            txtNome.Enabled = false;
+            txtCidade.Enabled = false;
+            txtEstado.Enabled = false;
+            txtNomeIgreja.Enabled = false;
+            radioEFiliado.Enabled = false;
+            radioNaoFiliado.Enabled = false;
+        }
+
+        private void HabilitarCampos()
+        {
+            txtIdPFisica.Enabled = true;
+            txtNome.Enabled = true;
+            txtCidade.Enabled = true;
+            txtEstado.Enabled = true;
+            txtNomeIgreja.Enabled = true;
+            radioEFiliado.Enabled = true;
+            radioNaoFiliado.Enabled = true;
         }
     }
 }
