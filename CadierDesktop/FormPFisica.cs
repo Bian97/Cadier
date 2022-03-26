@@ -440,6 +440,16 @@ namespace CadierDesktop
                 var pfisica = PegaFormulario();
                 WordUtil wordUtil = new WordUtil();
 
+                if(pfisica.IdPJuridica != null)
+                {
+                    if(pfisica.IdPJuridica.IdPJuridica > 0)
+                    {
+                        var jsonPJuridica = TransformaJson(RequisicaoMediador.RealizaRequisicaoGet(@"http://cadier.com.br/api/PJuridica/" + pfisica.IdPJuridica.IdPJuridica));
+                        if (jsonPJuridica == null) return;
+                        pfisica.IdPJuridica = ((List<PJuridica>)_jsonParaClasse.GetPJuridicas(jsonPJuridica)).First();
+                    }
+                }
+
                 if (Convert.ToInt32(opcao) == 1)
                 {
                     wordUtil.GerarPVC(new List<PFisica>() { pfisica }, TipoPVCEnum.Verde, imgFiliado.Image);
