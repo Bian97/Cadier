@@ -110,22 +110,15 @@ namespace CadierBiblioteca.Utilitarios
         {
             PJuridica pjuridica = null;
 
-            if (item["p_fisica_presidente"] != null)
+            if (item["PJuridica"]["IdPJuridica"] != null)
             {
-                pjuridica = new PJuridica() { IdPJuridica = item["IdPJuridica"] != null ? item["IdPJuridica"] : item["p_fisica_presidente"]["IdPJuridica"], Nome = item["p_fisica_presidente"]["Nome"] };
-            } else if(item["p_fisica_presidente"] == null && item["p_juridica"] != null)
-            {
-                pjuridica = new PJuridica()
-                {
-                    IdPJuridica = item["p_juridica"]["IdPJuridica"],
-                    Nome = item["p_juridica"]["Nome"]
-                };
-            } else if(item["p_fisica_presidente"] == null && item["p_juridica"] == null && item["infos_temporarias"] != null)
+                pjuridica = new PJuridica() { IdPJuridica = item["IdPJuridica"] != null ? item["IdPJuridica"] : item["PJuridica"]["IdPJuridica"], Nome = item["PJuridica"]["Nome"] };
+            } else if(item["PJuridica"]["IdPJuridica"] == null && item["InfosTemporarias"] != null)
             {
                 pjuridica = new PJuridica()
                 {
-                    Nome = item["infos_temporarias"]["NomeIgreja"],
-                    Endereco = new Endereco() { Rua = item["infos_temporarias"]["EnderecoIgreja"] }
+                    Nome = item["InfosTemporarias"]["NomeIgreja"],
+                    Endereco = new Endereco() { Rua = item["InfosTemporarias"]["EnderecoIgreja"] }
                 };
             }
 
