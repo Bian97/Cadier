@@ -382,6 +382,7 @@ namespace CadierDesktop
                 dateTimeInicio.Visible = true;                
                 lblValor.Visible = true;
                 lblValor.Text = "Valor à Acrescentar: ";
+                dateTimeMensalidade.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 28);
 
                 if (txtId.Text != "")
                 {
