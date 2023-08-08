@@ -29,12 +29,15 @@ namespace Cadier.API.Controllers
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                new Claim(ClaimTypes.NameIdentifier, credenciais.Cpf),
-                //new Claim(ClaimTypes.Name, credenciais.Cpf), NomeUsuario
-                    // ... outras reivindicações do usuário, se necessário
+                    new Claim(ClaimTypes.NameIdentifier, credenciais.Cpf),
+                    new Claim(ClaimTypes.Name, credenciais.Cpf),
+                    //new Claim(ClaimTypes.Name, credenciais.Cpf), NomeUsuario
+                        // ... outras reivindicações do usuário, se necessário
                 }),
                 Expires = DateTime.UtcNow.AddHours(5),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+                Audience = _jwtSettings.Audience,
+                Issuer = _jwtSettings.Issuer
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);

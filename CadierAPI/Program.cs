@@ -1,6 +1,5 @@
 using Cadier.Core;
-using Microsoft.Extensions.Hosting;
-
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
 builder.Services.AddHttpContextAccessor();
 builder.Services.ResolveDependencies(builder.Configuration);
 
@@ -23,6 +22,17 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Use CORS
+app.UseCors(options => options
+    .AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader());
+
+// Use routing
+app.UseRouting();
+
+// Use authentication and authorization
 app.UseAuthentication();
 app.UseAuthorization();
 

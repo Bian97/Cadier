@@ -31,14 +31,14 @@ namespace Cadier.API.Controllers
         }
 
         [HttpGet("Detalhes/{id}", Name = "GetPFisica/Detalhes")]
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Details(int id)
         {         
-            return View();
+            return Ok();
         }      
 
         [HttpPost(Name = "Cadastrar")]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([FromBody] IFormCollection collection)
+        public ActionResult Create([FromBody] PFisica pfisica)
         {
             try
             {
@@ -50,7 +50,7 @@ namespace Cadier.API.Controllers
             }
         }
 
-        [HttpPost(Name = "Alterar")]
+        [HttpPut(Name = "Alterar")]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([FromBody] PFisica pfisica)
         {

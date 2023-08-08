@@ -10,6 +10,7 @@ using Cadier.Abstractions.Interfaces.Services;
 using Cadier.Business;
 using Cadier.DB.Repositories;
 using Cadier.Abstractions.Interfaces.Repositories;
+using Microsoft.OpenApi.Models;
 
 namespace Cadier.Core
 {
@@ -36,9 +37,40 @@ namespace Cadier.Core
                         ValidateIssuerSigningKey = true,
                         ValidIssuer = jwtSettings.Issuer,
                         ValidAudience = jwtSettings.Audience,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecretKey))
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecretKey))                        
                     };
+                    options.SaveToken = true;
                 });
+
+            services.AddSwaggerGen(c =>
+            {                
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = jwtSettings.Audience, Version = "v1" });
+
+                // Adicione a configuração do JWT no Swagger
+                var securityScheme = new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Description = @"Enter 'Bearer' [space] and your token!",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "Bearer"
+                    }
+                };
+
+                c.AddSecurityDefinition("Bearer", securityScheme);                
+
+                var securityRequirement = new OpenApiSecurityRequirement
+                {
+                    { securityScheme, new List<string>() }
+                };
+
+                c.AddSecurityRequirement(securityRequirement);
+            });
 
             services.AddSingleton(
                 new BancoConfig() 

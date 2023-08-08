@@ -7,7 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Scripts\" />
+    <None Remove="Scripts\PFisica\PegarPFisicas.sql" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\PFisica\PegarPFisicas.sql" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Cadier.Abstractions\Cadier.Abstractions.csproj" />
     <ProjectReference Include="..\Cadier.Model\Cadier.Model.csproj" />
+    <ProjectReference Include="..\Cadier.Utilitaries\Cadier.Utilitaries.csproj" />
   </ItemGroup>
 
 </Project>

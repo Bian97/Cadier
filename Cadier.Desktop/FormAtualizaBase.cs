@@ -24,8 +24,11 @@ namespace Cadier.Desktop
 {
     public partial class FormAtualizaBase : Form
     {
+        private readonly JsonParaClasse _jsonParaClasse;
+
         public FormAtualizaBase()
         {
+            _jsonParaClasse = new JsonParaClasse();
             InitializeComponent();
         }
 
@@ -34,15 +37,32 @@ namespace Cadier.Desktop
 
         }        
 
+        //private dynamic TransformaJson(WebResponse valor)
+        //{
+        //    var serializer = new JsonSerializer();
+        //    using (var response = new StreamReader(valor.GetResponseStream()))
+        //    {
+        //        using (var jsonTextReader = new JsonTextReader(response))
+        //        {
+        //            return serializer.Deserialize<dynamic>(jsonTextReader);
+        //        }                
+        //    }
+        //}
+
         private dynamic TransformaJson(WebResponse valor)
         {
-            var serializer = new JsonSerializer();
-            using (var response = new StreamReader(valor.GetResponseStream()))
+            if (((HttpWebResponse)valor).StatusCode == HttpStatusCode.NotFound)
             {
-                using (var jsonTextReader = new JsonTextReader(response))
+                MessageBoxes.MostraMensagens("Número do Rol não encontrado!", "Erro!");
+                return null;
+            }
+            else
+            {
+                using (var response = new StreamReader(valor.GetResponseStream()))
                 {
-                    return serializer.Deserialize<dynamic>(jsonTextReader);
-                }                
+                    string json = response.ReadToEnd();
+                    return JsonConvert.DeserializeObject(json);
+                }
             }
         }
 
@@ -409,10 +429,16 @@ namespace Cadier.Desktop
 
         private void btnAtualizar_Click(object sender, EventArgs e)
         {
+
+            var jsonPJuridicas = TransformaJson(RequisicaoMediador.RealizaRequisicaoGet(@"http://cadier.com.br/api/PJuridica"));
+            var pjuridicas = ((List<PJuridica>)_jsonParaClasse.GetPJuridicas(jsonPJuridicas)).AsParallel().ToList();
+
+
+
             //GetGoogleMapsEndereco("215 South Avenue, #1", "Whitman", "MA", "02382");
 
             //var atendentes = GetAtendentes();
-            var pfisicasVelho = GetPFisicas();
+            //var pfisicasVelho = GetPFisicas();
             //var pjuridicas = GetPJuridicas();
 
             //var ordens = GetOrdemServico();
@@ -424,17 +450,17 @@ namespace Cadier.Desktop
             //GuardarDadosAsync(modelo);
 
 
-            var pfisicasNovo = PegaPFisica().Where(x => x.SituacaoCadastral.EFiliado).ToList();//AtualizaPFisica(PegaPFisica(), PegaPJuridica());
+            //var pfisicasNovo = PegaPFisica().Where(x => x.SituacaoCadastral.EFiliado).ToList();//AtualizaPFisica(PegaPFisica(), PegaPJuridica());
 
-            foreach(var pfisica in pfisicasNovo)
-            {
-                pfisica.Filiacao = pfisicasVelho.Where(x => x.IdPFisica == pfisica.IdPFisica).Select(c => c.Filiacao).First();
-            }
+            //foreach(var pfisica in pfisicasNovo)
+            //{
+            //    pfisica.Filiacao = pfisicasVelho.Where(x => x.IdPFisica == pfisica.IdPFisica).Select(c => c.Filiacao).First();
+            //}
 
             //EnviaPFisicaAsync(pfisicasNovo);
-            dynamic modelo = new { PFisicas = pfisicasNovo };
+            //dynamic modelo = new { PFisicas = pfisicasNovo };
 
-            AlterarDadosAsync(modelo);
+            //AlterarDadosAsync(modelo);
         }
 
         private List<PFisica> AtualizaPFisica(List<PFisica> pfisicas, List<PJuridica> pjuridicas)
