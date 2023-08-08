@@ -47,10 +47,11 @@ namespace Cadier.Core
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = jwtSettings.Audience, Version = "v1" });
 
                 // Adicione a configuração do JWT no Swagger
-                var securityScheme = new OpenApiSecurityScheme
+
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Name = "Authorization",
-                    Description = @"Enter 'Bearer' [space] and your token!",
+                    Description = @"Digite 'Bearer' [dê um espaço] e o token!",
                     In = ParameterLocation.Header,
                     Type = SecuritySchemeType.ApiKey,
                     Scheme = "Bearer",
@@ -60,16 +61,22 @@ namespace Cadier.Core
                         Type = ReferenceType.SecurityScheme,
                         Id = "Bearer"
                     }
-                };
+                });
 
-                c.AddSecurityDefinition("Bearer", securityScheme);                
-
-                var securityRequirement = new OpenApiSecurityRequirement
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
-                    { securityScheme, new List<string>() }
-                };
-
-                c.AddSecurityRequirement(securityRequirement);
+                    {
+                          new OpenApiSecurityScheme
+                          {
+                              Reference = new OpenApiReference
+                              {
+                                  Type = ReferenceType.SecurityScheme,
+                                  Id = "Bearer"
+                              }
+                          },
+                         new string[] {}
+                    }
+                });
             });
 
             services.AddSingleton(
