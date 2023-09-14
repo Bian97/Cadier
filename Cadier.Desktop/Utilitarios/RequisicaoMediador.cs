@@ -20,6 +20,12 @@ namespace Cadier.Desktop.Utilitarios
             return wsHelper.RequisicaoGet(url);
         }
 
+        public static async Task<string> RealizaRequisicaoPost(string url, object model, string bearerToken)
+        {
+            var wsHelper = new WebServiceHelper();
+            return await WebServiceHelper.RequisicaoPostPorObjetoAsync(url, model, bearerToken);
+        }
+
         public static WebResponse RealizaRequisicaoDelete(string url)
         {
             var wsHelper = new WebServiceHelper();

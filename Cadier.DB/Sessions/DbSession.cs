@@ -96,8 +96,9 @@ namespace Cadier.DB.Sessions
             return await _connection.QueryMultipleAsync(query, param, transaction, commandTimeout, commandType);
         }
 
-        public async Task ExecuteTransactionAsync(string query, DynamicParameters? parameters = null)
+        public async Task<int?> ExecuteTransactionAsync(string query, DynamicParameters? parameters = null)
         {
+            int? id = null;
             BeginTransaction();
 
             try
@@ -105,14 +106,15 @@ namespace Cadier.DB.Sessions
                 query = await PegarQueryArquivo(query);
                 parameters ??= new DynamicParameters();
                 parameters.Add("SiglaIdioma", GetCurrentCulture() ?? "pt-BR");
-                await _connection.ExecuteAsync(query, parameters, DbTransaction, commandTimeout: _bancoConfig.TimeOut);
+                id = await _connection.QueryFirstOrDefaultAsync<int>(query, parameters, DbTransaction, commandTimeout: _bancoConfig.TimeOut);
 
                 Commit();
+                return id;
             }
-            catch
+            catch(Exception ex)
             {
                 Rollback();
-                throw;
+                return id;
             }
         }
 

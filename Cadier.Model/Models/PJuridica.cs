@@ -7,7 +7,7 @@ using System.Text;
 namespace Cadier.Model.Models
 {
     public class PJuridica : IInfoBasicas
-    {
+    {        
         public int IdPJuridica { get; set; }
         public string Nome { get; set; }
         public DateTime? DataFundacao { get; set; }
@@ -17,5 +17,6 @@ namespace Cadier.Model.Models
         public PFisica PFisicaPresidente { get; set; }
         public PFisica PFisicaVice { get; set; }
         public string Email { get; set; }
+        public string Cnpj { get; set; }
     }
 }

@@ -238,20 +238,27 @@ namespace Cadier.Model.Utilitarios
 
         public List<HistoricoCursos> GetCursos(dynamic objectHistorico)
         {
-            var historicos = new List<HistoricoCursos>();
+            try
+            {
+                var historicos = new List<HistoricoCursos>();
 
-            if (objectHistorico is JArray)
-            {
-                foreach (var item in objectHistorico)
+                if (objectHistorico is JArray)
                 {
-                    historicos.Add(JsonParaCurso(item));
+                    foreach (var item in objectHistorico)
+                    {
+                        historicos.Add(JsonParaCurso(item));
+                    }
                 }
+                else
+                {
+                    historicos.Add(JsonParaCurso(objectHistorico));
+                }
+                return historicos;
             }
-            else
+            catch (Exception ex)
             {
-                historicos.Add(JsonParaCurso(objectHistorico));
+                throw ex;
             }
-            return historicos;
         }
 
         private HistoricoCursos JsonParaCurso(dynamic item)

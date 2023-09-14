@@ -10,22 +10,21 @@ namespace Cadier.API.Controllers
     [ApiController]
     [Route("[controller]")]
     [Authorize]
-    public class PFisicaController : Controller
+    public class PessoaFisicaController : Controller
     {
-        private readonly ILogger<PFisicaController> _logger;
-        private readonly IPFisicaService _pfisicaService;
+        private readonly ILogger<PessoaFisicaController> _logger;
+        private readonly IPessoaFisicaService _pessoaFisicaService;
 
-        public PFisicaController(ILogger<PFisicaController> logger, IPFisicaService pfisicaService)
+        public PessoaFisicaController(ILogger<PessoaFisicaController> logger, IPessoaFisicaService pfisicaService)
         {
             _logger = logger;
-            _pfisicaService = pfisicaService;
-
+            _pessoaFisicaService = pfisicaService;
         }
 
         [HttpGet("GetPFisicas/{Condicao}", Name = "GetPFisicas")]
         public async Task<ActionResult> Index(CondicaoEnum condicaoEnum)
         {
-            var pfisicas = await _pfisicaService.PegarPFisicas(condicaoEnum);
+            var pfisicas = await _pessoaFisicaService.PegarPessoasFisicas(condicaoEnum);
             if(pfisicas == null) return NotFound();
             return Ok(pfisicas);
         }
@@ -36,22 +35,14 @@ namespace Cadier.API.Controllers
             return Ok();
         }      
 
-        [HttpPost(Name = "Cadastrar")]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([FromBody] PFisica pfisica)
+        [HttpPost(Name = "CadastrarPessoaFisica")]
+        public async Task<ActionResult> Create([FromBody] PFisica pessoaFisica)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            if (pessoaFisica == null) return BadRequest();
+            return Ok(await _pessoaFisicaService.GuardarPessoaFisica(pessoaFisica));
         }
 
-        [HttpPut(Name = "Alterar")]
-        [ValidateAntiForgeryToken]
+        [HttpPut(Name = "AlterarPessoaFisica")]       
         public ActionResult Edit([FromBody] PFisica pfisica)
         {
             try

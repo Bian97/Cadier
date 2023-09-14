@@ -15,6 +15,7 @@ using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
+using System.Net.Cache;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -427,13 +428,166 @@ namespace Cadier.Desktop
             await EscolheConstrutor.EscolherConstrutorAsync(modelo, TipoRequisicaoEnum.Alterar);
         }
 
-        private void btnAtualizar_Click(object sender, EventArgs e)
+        private async void btnAtualizar_Click(object sender, EventArgs e)
         {
-
+            lblStatusAtualizacao.Text = "Recuperando dados da hostinger";
             var jsonPJuridicas = TransformaJson(RequisicaoMediador.RealizaRequisicaoGet(@"http://cadier.com.br/api/PJuridica"));
             var pjuridicas = ((List<PJuridica>)_jsonParaClasse.GetPJuridicas(jsonPJuridicas)).AsParallel().ToList();
 
+            var jsonPFisicas = TransformaJson(RequisicaoMediador.RealizaRequisicaoGet(@"http://cadier.com.br/api/PFisica?tipo=0&status=0"));
+            var pfisicas = ((List<PFisica>)_jsonParaClasse.GetPFisicas(jsonPFisicas)).AsParallel().ToList();
 
+            var jsonHistoricoCursos = TransformaJson(RequisicaoMediador.RealizaRequisicaoGet(@"http://cadier.com.br/api/listAllCursos"));
+            var historicoCursos = ((List<HistoricoCursos>)_jsonParaClasse.GetCursos(jsonHistoricoCursos)).AsParallel().ToList();
+            
+            var jsonHistoricoConsagracoes = TransformaJson(RequisicaoMediador.RealizaRequisicaoGet(@"http://cadier.com.br/api/listAll"));
+            var historicoConsagracoes = ((List<HistoricoConsagracao>)_jsonParaClasse.GetConsagracoes(jsonHistoricoConsagracoes)).AsParallel().ToList();
+
+            var jsonOrdemServicos = TransformaJson(RequisicaoMediador.RealizaRequisicaoGet(@"http://cadier.com.br/api/getAllOrders"));
+            var ordemServicos = ((List<OrdemServico>)_jsonParaClasse.GetOrdens(jsonOrdemServicos)).AsParallel().ToList();
+
+            lblStatusAtualizacao.Text = "Iniciando importação de Pessoa Jurídica.";
+            int indice = 1;
+            string bearerToken = JsonConvert.DeserializeObject<dynamic>(await RequisicaoMediador.RealizaRequisicaoPost(@"https://localhost:7095/autenticacao/login", new { nome = "teste", cpf = "teste" }, null)).token;
+            foreach (var pjuridica in pjuridicas)
+            {
+
+                lblStatusAtualizacao.Text = "Importando Pessoa Jurídica. "+indice+ " de "+pjuridicas.Count;
+                int idTemporario = 0;
+
+                if(pjuridica.SituacaoCadastral != null)
+                {
+                    int.TryParse(JsonConvert.DeserializeObject<dynamic>(await RequisicaoMediador.RealizaRequisicaoPost("https://localhost:7095/SituacaoCadastral", pjuridica.SituacaoCadastral, bearerToken)).ToString(), out idTemporario);
+                    pjuridica.SituacaoCadastral.Id = idTemporario;
+                }                
+                if(!new Endereco().TodasPropriedadesSaoNulas(pjuridica.Endereco))
+                {
+                    int.TryParse(JsonConvert.DeserializeObject<dynamic>(await RequisicaoMediador.RealizaRequisicaoPost("https://localhost:7095/Endereco", pjuridica.Endereco, bearerToken)).ToString(), out idTemporario);
+                    pjuridica.Endereco.Id = idTemporario;
+                }
+                
+                if(pjuridica.Info != null && !string.IsNullOrEmpty(pjuridica.Info.Cnpj))
+                    pjuridica.Cnpj = Regex.Replace(pjuridica.Info.Cnpj, "[^0-9]", "");
+
+                await RequisicaoMediador.RealizaRequisicaoPost("https://localhost:7095/PessoaJuridica", pjuridica, bearerToken);
+                indice++;
+            }
+
+            lblStatusAtualizacao.Text = "Iniciando importação de Pessoa Física.";
+            indice = 1;
+
+
+            foreach (var pfisica in pfisicas)
+            {
+                lblStatusAtualizacao.Text = "Importando Pessoa Física. " + indice + " de " + pfisicas.Count;
+                int idTemporario = 0;
+
+                if (pfisica.SituacaoCadastral != null)
+                {
+                    int.TryParse(JsonConvert.DeserializeObject<dynamic>(await RequisicaoMediador.RealizaRequisicaoPost("https://localhost:7095/SituacaoCadastral", pfisica.SituacaoCadastral, bearerToken)).ToString(), out idTemporario);
+                    pfisica.SituacaoCadastral.Id = idTemporario;
+                }
+                if (!new Endereco().TodasPropriedadesSaoNulas(pfisica.Endereco))
+                {
+                    int.TryParse(JsonConvert.DeserializeObject<dynamic>(await RequisicaoMediador.RealizaRequisicaoPost("https://localhost:7095/Endereco", pfisica.Endereco, bearerToken)).ToString(), out idTemporario);
+                    pfisica.Endereco.Id = idTemporario;
+                }
+
+                if (pfisica.Info != null)
+                {
+                    if (!string.IsNullOrEmpty(pfisica.Info.Cpf) && Regex.Replace(pfisica.Info.Cpf, "[^0-9]", "").Count(char.IsDigit) < 13)
+                        pfisica.Cpf = pfisica.Info.Cpf;
+                    
+                    if(!string.IsNullOrEmpty(pfisica.Info.Rg) && Regex.Replace(pfisica.Info.Rg, "[^0-9]", "").Count(char.IsDigit) < 13)
+                        pfisica.Rg = pfisica.Info.Rg;
+                }
+
+                pfisica.Indicacao = pfisica.ApresentouConv;
+
+                if(pfisica.IdPJuridica != null)
+                {
+                    if(pfisica.IdPJuridica.IdPJuridica == 0 && pfisica.IdPJuridica.Nome == null)
+                    {
+                        pfisica.IdPessoaJuridica = null;
+                        pfisica.IdTipoMembro = TipoMembroEnum.Membro;
+                    }
+                    else
+                    {
+                        if (pfisica.IdPJuridica.IdPJuridica == 0)
+                        {
+                            pfisica.IdPessoaJuridica = pjuridicas.Where(x => x.Nome.ToLower().Contains(pfisica.IdPJuridica.Nome.ToLower())).Select(x => x.IdPJuridica).FirstOrDefault();
+                        }
+                        else
+                        {
+                            pfisica.IdPessoaJuridica = pfisica.IdPJuridica.IdPJuridica;
+                        }
+
+                        if (pfisica.IdPessoaJuridica != null && pfisica.IdPessoaJuridica > 0)
+                        {
+                            var juridicaPertencente = pjuridicas.Where(x => x.IdPJuridica == pfisica.IdPessoaJuridica).FirstOrDefault();
+
+                            if (juridicaPertencente.PFisicaPresidente?.IdPFisica == pfisica.IdPFisica)
+                                pfisica.IdTipoMembro = TipoMembroEnum.Presidente;
+                            else if (juridicaPertencente.PFisicaVice?.IdPFisica == pfisica.IdPFisica)
+                                pfisica.IdTipoMembro = TipoMembroEnum.VicePresidente;
+                            else pfisica.IdTipoMembro = TipoMembroEnum.Membro;
+                        }
+                        else
+                        {
+                            pfisica.IdPessoaJuridica = null;
+                            pfisica.IdTipoMembro = TipoMembroEnum.Membro;
+                        }
+                    }
+                }
+
+                await RequisicaoMediador.RealizaRequisicaoPost("https://localhost:7095/PessoaFisica", pfisica, bearerToken);
+                indice++;
+            }
+
+
+            lblStatusAtualizacao.Text = "Iniciando importação de Histórico de Cursos.";
+            indice = 1;
+            foreach(var historicoCurso in historicoCursos)
+            {
+                lblStatusAtualizacao.Text = "Importando Histórico de Cursos. " + indice + " de " + historicoCursos.Count;
+
+                historicoCurso.DataFormatura = historicoCurso.DataFormatura != null && historicoCurso.DataFormatura.Value > DateTime.MinValue && historicoCurso.DataFormatura.Value > new DateTime(2000, 01, 01) ? historicoCurso.DataFormatura : null;
+                historicoCurso.DataLevouCert = historicoCurso.DataLevouCert != null && historicoCurso.DataLevouCert.Value > DateTime.MinValue && historicoCurso.DataLevouCert.Value > new DateTime(2000, 01, 01) ? historicoCurso.DataLevouCert : null;
+                historicoCurso.DataUltimPagam = historicoCurso.DataUltimPagam != null && historicoCurso.DataUltimPagam.Value > DateTime.MinValue && historicoCurso.DataUltimPagam.Value > new DateTime(2000, 01, 01) ? historicoCurso.DataUltimPagam : null;
+
+                await RequisicaoMediador.RealizaRequisicaoPost("https://localhost:7095/HistoricoCurso", historicoCurso, bearerToken);
+                indice++;
+            }
+
+            lblStatusAtualizacao.Text = "Iniciando importação de Histórico de Consagrações.";
+            indice = 1;
+            foreach(var historicoConsagracao in historicoConsagracoes)
+            {
+                lblStatusAtualizacao.Text = "Importando Histórico de Consagrações. " + indice + " de " + historicoConsagracoes.Count;
+
+                historicoConsagracao.Data = historicoConsagracao.Data != null && historicoConsagracao.Data.Value > DateTime.MinValue && historicoConsagracao.Data.Value > new DateTime(1960, 01, 01) ? historicoConsagracao.Data : null;
+
+                await RequisicaoMediador.RealizaRequisicaoPost("https://localhost:7095/HistoricoConsagracao", historicoConsagracao, bearerToken);
+                indice++;
+            }
+
+            lblStatusAtualizacao.Text = "Iniciando importação de Ordens de Serviços.";
+            indice = 1;
+
+            foreach(var ordemServico in ordemServicos)
+            {
+                lblStatusAtualizacao.Text = "Importando Ordens de Serviço. " + indice + " de " + ordemServicos.Count;
+                ordemServico.DataMensalidade = ordemServico.DataMensalidade.HasValue && ordemServico.DataMensalidade.Value < new DateTime(2000, 01, 01) ? null : ordemServico.DataMensalidade;
+
+                ordemServico.DataEntregue = ordemServico.DataEntregue != null && ordemServico.DataEntregue.Value > DateTime.MinValue && ordemServico.DataEntregue.Value > new DateTime(2000, 01, 01) ? (ordemServico.DataMensalidade != null && ordemServico.DataEntregue.Value < DateTime.Now ? ordemServico.DataMensalidade : ordemServico.DataEntregue) : null;
+                ordemServico.DataPedido = ordemServico.DataPedido != null && ordemServico.DataPedido.Value > DateTime.MinValue && ordemServico.DataPedido.Value > new DateTime(2000, 01, 01) ? (ordemServico.DataMensalidade != null && ordemServico.DataPedido.Value < DateTime.Now? ordemServico.DataMensalidade : ordemServico.DataEntregue) : null;
+                ordemServico.DataFeito = ordemServico.DataFeito != null && ordemServico.DataFeito.Value > DateTime.MinValue && ordemServico.DataFeito.Value > new DateTime(2000, 01, 01) ? (ordemServico.DataMensalidade != null && ordemServico.DataFeito.Value < DateTime.Now ? ordemServico.DataMensalidade : ordemServico.DataEntregue) : null;                
+
+                await RequisicaoMediador.RealizaRequisicaoPost("https://localhost:7095/OrdemServico", ordemServico, bearerToken);
+                indice++;
+            }
+
+            lblStatusAtualizacao.Text = "Finalizado!";
 
             //GetGoogleMapsEndereco("215 South Avenue, #1", "Whitman", "MA", "02382");
 

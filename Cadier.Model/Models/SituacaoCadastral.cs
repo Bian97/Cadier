@@ -7,6 +7,7 @@ namespace Cadier.Model.Models
 {
     public class SituacaoCadastral
     {
+        public int Id { get; set; }
         public DateTime? DataEntrou { get; set; }
         public DateTime? DataAtualizado { get; set; }
         public Atendente Atendente { get; set; }

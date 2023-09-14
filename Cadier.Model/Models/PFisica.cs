@@ -21,11 +21,16 @@ namespace Cadier.Model.Models
         public string Conjuge { get; set; }
         public string Filiacao { get; set; }
         public string ApresentouConv { get; set; }
+        public string Indicacao { get; set; }
         public PJuridica IdPJuridica { get; set; }
+        public int? IdPessoaJuridica { get; set; }
         public string Foto { get; set; }
         public string Nome { get; set; }
+        public string Cpf { get; set; }
+        public string Rg { get; set; }
         public Infos Info { get; set; }
         public Endereco Endereco { get; set; }
         public SituacaoCadastral SituacaoCadastral { get; set; }
+        public TipoMembroEnum IdTipoMembro { get; set; }
     }
 }

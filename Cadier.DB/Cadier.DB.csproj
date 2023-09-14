@@ -7,11 +7,29 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Scripts\PFisica\PegarPFisicas.sql" />
+    <None Remove="Scripts\Endereco\GuardarEndereco.sql" />
+    <None Remove="Scripts\HistoricoConsagracao\GuardarHistoricoConsagracao.sql" />
+    <None Remove="Scripts\HistoricoCurso\GuardarHistoricoCurso.sql" />
+    <None Remove="Scripts\OrdemServico\GuardarOrdemServico.sql" />
+    <None Remove="Scripts\PessoaFisica\GuardarPessoaFisica.sql" />
+    <None Remove="Scripts\PessoaFisica\PegarPessoasFisicas.sql" />
+    <None Remove="Scripts\PessoaJuridica\GuardarPessoaJuridica.sql" />
+    <None Remove="Scripts\PessoaJuridica\PegarPessoasJuridicas.sql" />
+    <None Remove="Scripts\SituacaoCadastral\GuardarSituacaoCadastral.sql" />
+    <None Remove="Scripts\SituacaoCadastral\PegarSituacaoCadastralPorId.sql" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Scripts\PFisica\PegarPFisicas.sql" />
+    <EmbeddedResource Include="Scripts\Endereco\GuardarEndereco.sql" />
+    <EmbeddedResource Include="Scripts\HistoricoConsagracao\GuardarHistoricoConsagracao.sql" />
+    <EmbeddedResource Include="Scripts\HistoricoCurso\GuardarHistoricoCurso.sql" />
+    <EmbeddedResource Include="Scripts\OrdemServico\GuardarOrdemServico.sql" />
+    <EmbeddedResource Include="Scripts\PessoaFisica\GuardarPessoaFisica.sql" />
+    <EmbeddedResource Include="Scripts\PessoaFisica\PegarPessoasFisicas.sql" />
+    <EmbeddedResource Include="Scripts\PessoaJuridica\GuardarPessoaJuridica.sql" />
+    <EmbeddedResource Include="Scripts\PessoaJuridica\PegarPessoasJuridicas.sql" />
+    <EmbeddedResource Include="Scripts\SituacaoCadastral\PegarSituacaoCadastralPorId.sql" />
+    <EmbeddedResource Include="Scripts\SituacaoCadastral\GuardarSituacaoCadastral.sql" />
   </ItemGroup>
 
   <ItemGroup>

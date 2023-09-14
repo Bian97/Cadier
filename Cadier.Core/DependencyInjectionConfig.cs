@@ -90,11 +90,23 @@ namespace Cadier.Core
             #endregion
 
             #region Services
-            services.AddTransient<IPFisicaService, PFisicaService>();
+            services.AddTransient<IPessoaJuridicaService, PessoaJuridicaService>();
+            services.AddTransient<IPessoaFisicaService, PessoaFisicaService>();
+            services.AddTransient<IEnderecoService, EnderecoService>();
+            services.AddTransient<ISituacaoCadastralService, SituacaoCadastralService>();
+            services.AddTransient<IHistoricoCursoService, HistoricoCursoService>();
+            services.AddTransient<IHistoricoConsagracaoService, HistoricoConsagracaoService>();
+            services.AddTransient<IOrdemServicoService, OrdemServicoService>();
             #endregion
 
             #region Repositories
-            services.AddTransient<IPFisicaRepository, PFisicaRepository>();
+            services.AddTransient<IPessoaJuridicaRepository, PessoaJuridicaRepository>();
+            services.AddTransient<IPessoaFisicaRepository, PessoaFisicaRepository>();
+            services.AddTransient<IEnderecoRepository, EnderecoRepository>();
+            services.AddTransient<ISituacaoCadastralRepository, SituacaoCadastralRepository>();
+            services.AddTransient<IHistoricoCursoRepository, HistoricoCursoRepository>();
+            services.AddTransient<IHistoricoConsagracaoRepository, HistoricoConsagracaoRepository>();
+            services.AddTransient<IOrdemServicoRepository, OrdemServicoRepository>();
             #endregion
 
             return services;

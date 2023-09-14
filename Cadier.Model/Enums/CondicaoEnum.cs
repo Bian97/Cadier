@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Cadier.Model.Enums
+﻿namespace Cadier.Model.Enums
 {
     public enum CondicaoEnum
     {

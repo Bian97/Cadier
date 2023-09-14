@@ -1,4 +1,5 @@
 ﻿using Cadier.Model.Enums;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -64,6 +65,34 @@ namespace Cadier.Model
                     return await response.Content.ReadAsStringAsync();
                 }
             } catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static async Task<string> RequisicaoPostPorObjetoAsync(string url, object objeto, string bearerToken)
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
+                    
+                    string json = JsonConvert.SerializeObject(objeto);
+                    
+                    StringContent content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                    HttpResponseMessage response = await client.PostAsync(url, content);
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        throw new Exception("Erro na requisição. Código: " + response.StatusCode + " " + response.RequestMessage);
+                    }
+
+                    return await response.Content.ReadAsStringAsync();
+                }
+            }
+            catch (Exception ex)
             {
                 throw ex;
             }
