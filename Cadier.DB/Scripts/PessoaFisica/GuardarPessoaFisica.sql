@@ -11,12 +11,13 @@
            ,[DataNascimento]
            ,[Email]
            ,[Foto]
-           ,[Cpf]
+           ,[DocumentoIdentificacaoSocial]
            ,[Rg]
            ,[IdEnd]
            ,[IdSit]
            ,[IdPju]
-           ,[IdTme])
+           ,[IdTme]
+           ,[IdAte])
      VALUES
            (@IdPFisica
            ,@Nome
@@ -30,9 +31,10 @@
            ,@DataNascimento
            ,@Email
            ,@Foto
-           ,@Cpf
+           ,@DocumentoIdentificacaoSocial
            ,@Rg
            ,@IdEndereco
            ,@IdSituacaoCadastral
            ,@IdPessoaJuridica
-           ,@IdTipoMembro)
+           ,@IdTipoMembro
+           ,@IdAtendente)

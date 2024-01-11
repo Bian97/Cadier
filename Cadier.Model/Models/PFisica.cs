@@ -10,6 +10,9 @@ namespace Cadier.Model.Models
     public class PFisica : IInfoBasicas
     {
         public int IdPFisica { get; set; }
+        public int IdAtendente { get; set; }
+        public int? IdEndereco { get; set; }
+        public int? IdSituacaoCadastral { get; set; }
         public string Profissao { get; set; }
         public string Email { get; set; }
         public string Telefone1 { get; set; }
@@ -27,6 +30,7 @@ namespace Cadier.Model.Models
         public string Foto { get; set; }
         public string Nome { get; set; }
         public string Cpf { get; set; }
+        public string DocumentoIdentificacaoSocial { get; set; }
         public string Rg { get; set; }
         public Infos Info { get; set; }
         public Endereco Endereco { get; set; }

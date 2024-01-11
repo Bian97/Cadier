@@ -11,7 +11,8 @@
            ,[DataEntregue]
            ,[Obs]
            ,[IdPju]
-           ,[IdPfi])
+           ,[IdPfi]
+           ,[IdAte])
      VALUES
            (@Servico
            ,@TipoServico
@@ -24,7 +25,8 @@
            ,@DataFeito
            ,@DataEntregue
            ,@Obs
-           ,@IdPju
-           ,@IdPfi)
+           ,@IdPessoaJuridica
+           ,@IdPessoaFisica
+           ,@IdAtendente)
 
 SELECT @@IDENTITY

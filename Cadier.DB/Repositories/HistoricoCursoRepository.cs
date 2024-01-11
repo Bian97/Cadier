@@ -34,17 +34,7 @@ namespace Cadier.DB.Repositories
             return await _dbSession.ExecuteTransactionAsync
                 (
                     HistoricoCursoConstants.GuardarHistoricoCurso,
-                    new DynamicParameters(new
-                    {
-                        historicoCurso.Curso,
-                        historicoCurso.DataFormatura,
-                        DataLevouCertificado = historicoCurso.DataLevouCert,
-                        DataUltimoPagamento = historicoCurso.DataUltimPagam,
-                        historicoCurso.Periodo,
-                        historicoCurso.Obs,
-                        historicoCurso.RestaPagar,
-                        IdPfi = historicoCurso.PFisica.IdPFisica
-                    })
+                    new DynamicParameters(historicoCurso)
                 );
         }
     }

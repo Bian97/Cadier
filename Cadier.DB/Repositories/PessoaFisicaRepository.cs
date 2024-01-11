@@ -29,33 +29,13 @@ namespace Cadier.DB.Repositories
         {
             return await _dbSession.ExecuteTransactionAsync(
                 PessoaFisicaConstants.GuardarPessoaFisica, 
-                new DynamicParameters(new
-                {
-                    pfisica.IdPFisica,
-                    pfisica.Nome,
-                    pfisica.Profissao,
-                    pfisica.Sexo,
-                    pfisica.Telefone1,
-                    pfisica.Telefone2,
-                    pfisica.Indicacao,
-                    pfisica.Cargo,
-                    pfisica.Conjuge,
-                    pfisica.DataNascimento,
-                    pfisica.Email,
-                    pfisica.Foto,
-                    pfisica.Cpf,
-                    pfisica.Rg,
-                    IdEndereco = pfisica.Endereco?.Id,
-                    IdSituacaoCadastral = pfisica.SituacaoCadastral?.Id,
-                    pfisica.IdPessoaJuridica,
-                    pfisica.IdTipoMembro
-                })
+                new DynamicParameters(pfisica)
             );
         }
 
-        public Task<PFisica> PegarPessoaFisicaPorIdAsync(int id)
+        public async Task<PFisica> PegarPessoaFisicaPorIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _dbSession.QueryFirstOrDefaultAsync<PFisica>(PessoaFisicaConstants.PegarPessoaFisicaPorId, new DynamicParameters(new { Id = id }));
         }
 
         public async Task<IEnumerable<PFisica>> PegarPessoasFisicasAsync(CondicaoEnum condicaoEnum)

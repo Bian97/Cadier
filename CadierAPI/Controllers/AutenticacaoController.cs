@@ -1,4 +1,6 @@
-﻿using Cadier.Model.ModelsConfigs;
+﻿using Cadier.Abstractions.Interfaces.Services;
+using Cadier.Model;
+using Cadier.Model.ModelsConfigs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -12,37 +14,56 @@ namespace Cadier.API.Controllers
     public class AutenticacaoController : Controller
     {
         private readonly JwtSettings _jwtSettings;
-        public AutenticacaoController(JwtSettings jwtSettings) 
+        private readonly IPessoaFisicaService _pessoaFisicaService;
+        private readonly IAtendenteService _atendenteService;
+
+        public AutenticacaoController(JwtSettings jwtSettings, IPessoaFisicaService pessoaFisicaService, IAtendenteService atendenteService)
         {
             _jwtSettings = jwtSettings;
+            _pessoaFisicaService = pessoaFisicaService;
+            _atendenteService = atendenteService;
         }
 
         [HttpPost("login")]
-        public IActionResult Login([FromBody] CredenciaisUsuario credenciais)
+        public async Task<IActionResult> Login([FromBody] CredenciaisUsuario credenciais)
         {
-            // Aqui, você deve verificar as credenciais do usuário (por exemplo, consultar um banco de dados) e decidir se elas são válidas.
-
-            // Se as credenciais forem válidas, gere um token JWT
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_jwtSettings.SecretKey);
-            var tokenDescriptor = new SecurityTokenDescriptor
+            try
             {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                    new Claim(ClaimTypes.NameIdentifier, credenciais.Cpf),
-                    new Claim(ClaimTypes.Name, credenciais.Cpf),
-                    //new Claim(ClaimTypes.Name, credenciais.Cpf), NomeUsuario
-                        // ... outras reivindicações do usuário, se necessário
-                }),
-                Expires = DateTime.UtcNow.AddHours(5),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
-                Audience = _jwtSettings.Audience,
-                Issuer = _jwtSettings.Issuer
-            };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            var tokenString = tokenHandler.WriteToken(token);
+                if (string.IsNullOrEmpty(credenciais.Documento) || !credenciais.Numero.HasValue)
+                    return BadRequest();
 
-            return Ok(new { Token = tokenString });
+                var loginSucesso = false;
+                if (credenciais.Atendente)
+                    loginSucesso = (await _atendenteService.LoginAtendenteAsync(credenciais.Documento, credenciais.Numero.Value));
+                else
+                    loginSucesso = (await _pessoaFisicaService.LoginPessoaFisicaAsync(credenciais.Documento, credenciais.Numero.Value));
+
+                if (!loginSucesso)
+                    return Unauthorized();
+
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var key = Encoding.ASCII.GetBytes(_jwtSettings.SecretKey);
+                var tokenDescriptor = new SecurityTokenDescriptor
+                {
+                    Subject = new ClaimsIdentity(new Claim[]
+                    {
+                    new Claim(ClaimTypes.NameIdentifier, credenciais.Documento),
+                    new Claim(ClaimTypes.Sid, credenciais.Numero.Value.ToString()),
+                    new Claim(ClaimTypes.Role, credenciais.Atendente ? "Admin" : "User"),
+                    }),
+                    Expires = DateTime.UtcNow.AddHours(5),
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
+                    Audience = _jwtSettings.Audience,
+                    Issuer = _jwtSettings.Issuer
+                };
+                var tokenString = tokenHandler.WriteToken(tokenHandler.CreateToken(tokenDescriptor));
+
+                return Ok(new { Token = tokenString, Documento = credenciais.Documento, Numero = credenciais.Numero, Atendente = credenciais.Atendente, PossuiConta = true });
+            }
+            catch(TimeoutException)
+            {
+                return BadRequest();
+            }
         }
     }
 }

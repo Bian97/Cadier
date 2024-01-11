@@ -2,7 +2,8 @@
 {
     public class CredenciaisUsuario
     {
-        public string Cpf { get; set; }
-        public string Senha { get; set; }
+        public string Documento { get; set; }
+        public int? Numero { get; set; }
+        public bool Atendente { get; set; }
     }
 }

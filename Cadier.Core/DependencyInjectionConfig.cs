@@ -90,6 +90,7 @@ namespace Cadier.Core
             #endregion
 
             #region Services
+            services.AddTransient<IAtendenteService, AtendenteService>();
             services.AddTransient<IPessoaJuridicaService, PessoaJuridicaService>();
             services.AddTransient<IPessoaFisicaService, PessoaFisicaService>();
             services.AddTransient<IEnderecoService, EnderecoService>();
@@ -100,6 +101,7 @@ namespace Cadier.Core
             #endregion
 
             #region Repositories
+            services.AddTransient<IAtendenteRepository, AtendenteRepository>();
             services.AddTransient<IPessoaJuridicaRepository, PessoaJuridicaRepository>();
             services.AddTransient<IPessoaFisicaRepository, PessoaFisicaRepository>();
             services.AddTransient<IEnderecoRepository, EnderecoRepository>();

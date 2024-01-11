@@ -24,16 +24,7 @@ namespace Cadier.DB.Repositories
         public async Task<int?> GuardarPessoaJuridicaAsync(PJuridica pessoaJuridica)
         {
             return await _dbSession.ExecuteTransactionAsync(PessoaJuridicaConstants.GuardarPessoaJuridica, 
-                new DynamicParameters(new
-                {
-                    pessoaJuridica.IdPJuridica,//PARA ATUALIZAR A BASE
-                    pessoaJuridica.Nome,
-                    pessoaJuridica.DataFundacao,
-                    pessoaJuridica.Email,
-                    IdEndereco = pessoaJuridica.Endereco?.Id,
-                    IdSituacaoCadastral = pessoaJuridica.SituacaoCadastral?.Id,
-                    pessoaJuridica.Cnpj
-                })
+                new DynamicParameters(pessoaJuridica)
             );
         }
 

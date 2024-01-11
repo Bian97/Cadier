@@ -1,4 +1,4 @@
-﻿ SELECT pf.IdPfi, pf.Nome, pf.Email, pf.DocumentoIdentificacaoSocial
+﻿ SELECT pf.IdPFisica, pf.Nome, pf.Email
         --pj.Nome as NomeIgreja, 
         --en.Bairro, en.Estado, en.Cidade,
         --inf.Cpf, sc.Condicao, sc.EFiliado, sc.IdAtendente

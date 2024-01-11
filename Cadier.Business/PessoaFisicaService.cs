@@ -25,18 +25,30 @@ namespace Cadier.Business
             pfisica.Telefone1 = !string.IsNullOrEmpty(pfisica.Telefone1) ? Regex.Replace(pfisica.Telefone1, "[^0-9]", "") : null;
             pfisica.Telefone2 = !string.IsNullOrEmpty(pfisica.Telefone2) ? Regex.Replace(pfisica.Telefone2, "[^0-9]", "") : null;
             pfisica.Cpf = !string.IsNullOrEmpty(pfisica.Cpf) ? Regex.Replace(pfisica.Cpf, "[^0-9]", "") : null;
+            pfisica.DocumentoIdentificacaoSocial = !string.IsNullOrEmpty(pfisica.DocumentoIdentificacaoSocial) ? Regex.Replace(pfisica.DocumentoIdentificacaoSocial, "[^0-9]", "") : null;
             pfisica.Rg = !string.IsNullOrEmpty(pfisica.Rg) ? Regex.Replace(pfisica.Rg, "[^0-9]", "") : null;
             return await _pessoaFisicaRepository.GuardarPessoaFisicaAsync(pfisica);
         }
 
-        public Task<PFisica> PegarPessoaFisicaPorId(int id)
+        public async Task<PFisica> PegarPessoaFisicaPorId(int id)
         {
-            throw new NotImplementedException();
+            return await _pessoaFisicaRepository.PegarPessoaFisicaPorIdAsync(id);
         }
 
         public async Task<IEnumerable<PFisica>> PegarPessoasFisicas(CondicaoEnum condicaoEnum)
         {
             return await _pessoaFisicaRepository.PegarPessoasFisicasAsync(condicaoEnum);
+        }
+
+        public async Task<bool> LoginPessoaFisicaAsync(string documento, int numero)
+        {
+            var pessoaFisica = await PegarPessoaFisicaPorId(numero);
+            if (pessoaFisica == null)
+                return false;
+
+            if (pessoaFisica.DocumentoIdentificacaoSocial.Equals(Regex.Replace(documento, "[^0-9]+", "")))
+                return true;
+            return false;
         }
     }
 }

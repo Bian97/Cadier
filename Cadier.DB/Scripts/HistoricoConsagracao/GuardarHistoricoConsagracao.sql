@@ -13,6 +13,6 @@
            ,@Lugar
            ,@NomeIndicou
            ,@Obs
-           ,@IdPfi)
+           ,@IdPessoaFisica)
 
 SELECT @@IDENTITY

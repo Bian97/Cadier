@@ -458,12 +458,14 @@ namespace Cadier.Desktop
                 if(pjuridica.SituacaoCadastral != null)
                 {
                     int.TryParse(JsonConvert.DeserializeObject<dynamic>(await RequisicaoMediador.RealizaRequisicaoPost("https://localhost:7095/SituacaoCadastral", pjuridica.SituacaoCadastral, bearerToken)).ToString(), out idTemporario);
-                    pjuridica.SituacaoCadastral.Id = idTemporario;
-                }                
+                    pjuridica.IdSituacaoCadastral = idTemporario;
+                    pjuridica.IdAtendente = pjuridica.SituacaoCadastral.Atendente.CodAtendente;
+                }
+
                 if(!new Endereco().TodasPropriedadesSaoNulas(pjuridica.Endereco))
                 {
                     int.TryParse(JsonConvert.DeserializeObject<dynamic>(await RequisicaoMediador.RealizaRequisicaoPost("https://localhost:7095/Endereco", pjuridica.Endereco, bearerToken)).ToString(), out idTemporario);
-                    pjuridica.Endereco.Id = idTemporario;
+                    pjuridica.IdEndereco = idTemporario;
                 }
                 
                 if(pjuridica.Info != null && !string.IsNullOrEmpty(pjuridica.Info.Cnpj))
@@ -485,20 +487,25 @@ namespace Cadier.Desktop
                 if (pfisica.SituacaoCadastral != null)
                 {
                     int.TryParse(JsonConvert.DeserializeObject<dynamic>(await RequisicaoMediador.RealizaRequisicaoPost("https://localhost:7095/SituacaoCadastral", pfisica.SituacaoCadastral, bearerToken)).ToString(), out idTemporario);
-                    pfisica.SituacaoCadastral.Id = idTemporario;
+                    pfisica.IdSituacaoCadastral = idTemporario;
+                    pfisica.IdAtendente = pfisica.SituacaoCadastral.Atendente.CodAtendente;
                 }
+
                 if (!new Endereco().TodasPropriedadesSaoNulas(pfisica.Endereco))
                 {
                     int.TryParse(JsonConvert.DeserializeObject<dynamic>(await RequisicaoMediador.RealizaRequisicaoPost("https://localhost:7095/Endereco", pfisica.Endereco, bearerToken)).ToString(), out idTemporario);
-                    pfisica.Endereco.Id = idTemporario;
+                    pfisica.IdEndereco = idTemporario;
                 }
 
                 if (pfisica.Info != null)
                 {
                     if (!string.IsNullOrEmpty(pfisica.Info.Cpf) && Regex.Replace(pfisica.Info.Cpf, "[^0-9]", "").Count(char.IsDigit) < 13)
                         pfisica.Cpf = pfisica.Info.Cpf;
-                    
-                    if(!string.IsNullOrEmpty(pfisica.Info.Rg) && Regex.Replace(pfisica.Info.Rg, "[^0-9]", "").Count(char.IsDigit) < 13)
+
+                    pfisica.DocumentoIdentificacaoSocial = pfisica.Cpf;
+
+
+                    if (!string.IsNullOrEmpty(pfisica.Info.Rg) && Regex.Replace(pfisica.Info.Rg, "[^0-9]", "").Count(char.IsDigit) < 13)
                         pfisica.Rg = pfisica.Info.Rg;
                 }
 
@@ -535,10 +542,10 @@ namespace Cadier.Desktop
                         else
                         {
                             pfisica.IdPessoaJuridica = null;
-                            pfisica.IdTipoMembro = TipoMembroEnum.Membro;
+                            pfisica.IdTipoMembro = TipoMembroEnum.Membro;                            
                         }
                     }
-                }
+                }                
 
                 await RequisicaoMediador.RealizaRequisicaoPost("https://localhost:7095/PessoaFisica", pfisica, bearerToken);
                 indice++;
@@ -551,9 +558,10 @@ namespace Cadier.Desktop
             {
                 lblStatusAtualizacao.Text = "Importando Histórico de Cursos. " + indice + " de " + historicoCursos.Count;
 
-                historicoCurso.DataFormatura = historicoCurso.DataFormatura != null && historicoCurso.DataFormatura.Value > DateTime.MinValue && historicoCurso.DataFormatura.Value > new DateTime(2000, 01, 01) ? historicoCurso.DataFormatura : null;
-                historicoCurso.DataLevouCert = historicoCurso.DataLevouCert != null && historicoCurso.DataLevouCert.Value > DateTime.MinValue && historicoCurso.DataLevouCert.Value > new DateTime(2000, 01, 01) ? historicoCurso.DataLevouCert : null;
-                historicoCurso.DataUltimPagam = historicoCurso.DataUltimPagam != null && historicoCurso.DataUltimPagam.Value > DateTime.MinValue && historicoCurso.DataUltimPagam.Value > new DateTime(2000, 01, 01) ? historicoCurso.DataUltimPagam : null;
+                historicoCurso.IdPessoaFisica = historicoCurso.PFisica.IdPFisica;
+                historicoCurso.DataFormatura = historicoCurso.DataFormatura != null && historicoCurso.DataFormatura.Value > new DateTime(2000, 01, 01) ? historicoCurso.DataFormatura : null;
+                historicoCurso.DataLevouCertificado = historicoCurso.DataLevouCert != null && historicoCurso.DataLevouCert.Value > new DateTime(2000, 01, 01) ? historicoCurso.DataLevouCert : null;
+                historicoCurso.DataUltimoPagamento = historicoCurso.DataUltimPagam != null && historicoCurso.DataUltimPagam.Value > new DateTime(2000, 01, 01) ? historicoCurso.DataUltimPagam : null;
 
                 await RequisicaoMediador.RealizaRequisicaoPost("https://localhost:7095/HistoricoCurso", historicoCurso, bearerToken);
                 indice++;
@@ -565,7 +573,9 @@ namespace Cadier.Desktop
             {
                 lblStatusAtualizacao.Text = "Importando Histórico de Consagrações. " + indice + " de " + historicoConsagracoes.Count;
 
-                historicoConsagracao.Data = historicoConsagracao.Data != null && historicoConsagracao.Data.Value > DateTime.MinValue && historicoConsagracao.Data.Value > new DateTime(1960, 01, 01) ? historicoConsagracao.Data : null;
+                historicoConsagracao.IdPessoaFisica = historicoConsagracao.PFisica.IdPFisica;
+                historicoConsagracao.DataLiturgia = historicoConsagracao.Data != null && historicoConsagracao.Data.Value > new DateTime(1960, 01, 01) ? historicoConsagracao.Data : null;
+                historicoConsagracao.Lugar = historicoConsagracao.Local;
 
                 await RequisicaoMediador.RealizaRequisicaoPost("https://localhost:7095/HistoricoConsagracao", historicoConsagracao, bearerToken);
                 indice++;
@@ -577,12 +587,15 @@ namespace Cadier.Desktop
             foreach(var ordemServico in ordemServicos)
             {
                 lblStatusAtualizacao.Text = "Importando Ordens de Serviço. " + indice + " de " + ordemServicos.Count;
-                ordemServico.DataMensalidade = ordemServico.DataMensalidade.HasValue && ordemServico.DataMensalidade.Value < new DateTime(2000, 01, 01) ? null : ordemServico.DataMensalidade;
+                ordemServico.Mensalidade = ordemServico.DataMensalidade.HasValue && ordemServico.DataMensalidade.Value < new DateTime(2000, 01, 01) ? null : ordemServico.DataMensalidade;
 
                 ordemServico.DataEntregue = ordemServico.DataEntregue != null && ordemServico.DataEntregue.Value > DateTime.MinValue && ordemServico.DataEntregue.Value > new DateTime(2000, 01, 01) ? (ordemServico.DataMensalidade != null && ordemServico.DataEntregue.Value < DateTime.Now ? ordemServico.DataMensalidade : ordemServico.DataEntregue) : null;
                 ordemServico.DataPedido = ordemServico.DataPedido != null && ordemServico.DataPedido.Value > DateTime.MinValue && ordemServico.DataPedido.Value > new DateTime(2000, 01, 01) ? (ordemServico.DataMensalidade != null && ordemServico.DataPedido.Value < DateTime.Now? ordemServico.DataMensalidade : ordemServico.DataEntregue) : null;
-                ordemServico.DataFeito = ordemServico.DataFeito != null && ordemServico.DataFeito.Value > DateTime.MinValue && ordemServico.DataFeito.Value > new DateTime(2000, 01, 01) ? (ordemServico.DataMensalidade != null && ordemServico.DataFeito.Value < DateTime.Now ? ordemServico.DataMensalidade : ordemServico.DataEntregue) : null;                
+                ordemServico.DataFeito = ordemServico.DataFeito != null && ordemServico.DataFeito.Value > DateTime.MinValue && ordemServico.DataFeito.Value > new DateTime(2000, 01, 01) ? (ordemServico.DataMensalidade != null && ordemServico.DataFeito.Value < DateTime.Now ? ordemServico.DataMensalidade : ordemServico.DataEntregue) : null;
+                ordemServico.IdPessoaFisica = ordemServico.PFisica?.IdPFisica;
+                ordemServico.IdPessoaJuridica = ordemServico.PJuridica?.IdPJuridica;
 
+                ordemServico.IdAtendente = ordemServico.Atendente.CodAtendente;
                 await RequisicaoMediador.RealizaRequisicaoPost("https://localhost:7095/OrdemServico", ordemServico, bearerToken);
                 indice++;
             }

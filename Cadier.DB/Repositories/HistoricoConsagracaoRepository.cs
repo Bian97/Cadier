@@ -20,16 +20,7 @@ namespace Cadier.DB.Repositories
             return await _dbSession.ExecuteTransactionAsync
                 (
                     HistoricoConsagracaoConstants.GuardarHistoricoConsagracao,
-                    new DynamicParameters(new
-                    {
-                        historicoConsagracao.Cargo,
-                        DataLiturgia = historicoConsagracao.Data,
-                        historicoConsagracao.Igreja,
-                        Lugar = historicoConsagracao.Local,
-                        historicoConsagracao.NomeIndicou,
-                        historicoConsagracao.Obs,
-                        IdPfi = historicoConsagracao.PFisica.IdPFisica
-                    })
+                    new DynamicParameters(historicoConsagracao)
                 );
         }
     }

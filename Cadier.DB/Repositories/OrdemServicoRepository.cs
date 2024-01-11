@@ -27,22 +27,7 @@ namespace Cadier.DB.Repositories
             return await _dbSession.ExecuteTransactionAsync
                 (
                     OrdemServicoConstants.GuardarOrdemServico,
-                    new DynamicParameters(new
-                    {
-                        ordemServico.Servico,
-                        ordemServico.TipoServico,
-                        ordemServico.Valor,
-                        ordemServico.Pago,
-                        ordemServico.Deposito,
-                        ordemServico.CreditoAnterior,
-                        Mensalidade = ordemServico.DataMensalidade,
-                        ordemServico.DataPedido,
-                        ordemServico.DataFeito,
-                        ordemServico.DataEntregue,
-                        ordemServico.Obs,
-                        IdPju = ordemServico.PJuridica?.IdPJuridica,
-                        IdPfi = ordemServico.PFisica?.IdPFisica
-                    })
+                    new DynamicParameters(ordemServico)
                 );
         }
     }

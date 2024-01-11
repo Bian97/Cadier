@@ -9,6 +9,7 @@ namespace Cadier.Model
         public int CodAtendente { get; set; }
         public string Telefone { get; set; }
         public string Nome { get; set; }
+        public string DocumentoIdentificacaoSocial { get; set; }
         public Infos Info { get; set; }
         public Endereco Endereco { get; set; }        
     }

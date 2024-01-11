@@ -9,6 +9,9 @@ namespace Cadier.Model.Models
     public class PJuridica : IInfoBasicas
     {        
         public int IdPJuridica { get; set; }
+        public int IdAtendente { get; set; }
+        public int? IdEndereco { get; set; }
+        public int? IdSituacaoCadastral { get; set; }
         public string Nome { get; set; }
         public DateTime? DataFundacao { get; set; }
         public Infos Info { get; set; }

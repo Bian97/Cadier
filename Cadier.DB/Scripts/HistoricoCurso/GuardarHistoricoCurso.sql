@@ -15,6 +15,6 @@
            ,@Periodo
            ,@Obs
            ,@RestaPagar
-           ,@IdPfi)
+           ,@IdPessoaFisica)
 
 SELECT @@IDENTITY

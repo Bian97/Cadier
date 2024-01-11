@@ -9,5 +9,6 @@ namespace Cadier.Abstractions.Interfaces.Services
         Task<IEnumerable<PFisica>> PegarPessoasFisicas(CondicaoEnum condicaoEnum);
         Task<int?> GuardarPessoaFisica(PFisica pfisica);
         Task<PFisica> AlterarPessoaFisica(PFisica pfisica);
+        Task<bool> LoginPessoaFisicaAsync(string documento, int numero);
     }
 }

@@ -7,7 +7,8 @@ INSERT INTO [dbo].[PessoaJuridica_PJU]
            ,[Email]
            ,[Cnpj]
            ,[IdEnd]
-           ,[IdSit])
+           ,[IdSit]
+           ,[IdAte])
      VALUES
            (@IdPJuridica
            ,@Nome
@@ -15,6 +16,7 @@ INSERT INTO [dbo].[PessoaJuridica_PJU]
            ,@Email
            ,@Cnpj
            ,@IdEndereco
-           ,@IdSituacaoCadastral)
+           ,@IdSituacaoCadastral
+           ,@IdAtendente)
 
 SELECT @IdPJuridica

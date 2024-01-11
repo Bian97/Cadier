@@ -7,11 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Scripts\Atendente\PegarAtendentePorId.sql" />
     <None Remove="Scripts\Endereco\GuardarEndereco.sql" />
     <None Remove="Scripts\HistoricoConsagracao\GuardarHistoricoConsagracao.sql" />
     <None Remove="Scripts\HistoricoCurso\GuardarHistoricoCurso.sql" />
     <None Remove="Scripts\OrdemServico\GuardarOrdemServico.sql" />
     <None Remove="Scripts\PessoaFisica\GuardarPessoaFisica.sql" />
+    <None Remove="Scripts\PessoaFisica\PegarPessoaFisicaPorId.sql" />
     <None Remove="Scripts\PessoaFisica\PegarPessoasFisicas.sql" />
     <None Remove="Scripts\PessoaJuridica\GuardarPessoaJuridica.sql" />
     <None Remove="Scripts\PessoaJuridica\PegarPessoasJuridicas.sql" />
@@ -20,11 +22,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Scripts\Atendente\PegarAtendentePorId.sql" />
     <EmbeddedResource Include="Scripts\Endereco\GuardarEndereco.sql" />
     <EmbeddedResource Include="Scripts\HistoricoConsagracao\GuardarHistoricoConsagracao.sql" />
     <EmbeddedResource Include="Scripts\HistoricoCurso\GuardarHistoricoCurso.sql" />
     <EmbeddedResource Include="Scripts\OrdemServico\GuardarOrdemServico.sql" />
     <EmbeddedResource Include="Scripts\PessoaFisica\GuardarPessoaFisica.sql" />
+    <EmbeddedResource Include="Scripts\PessoaFisica\PegarPessoaFisicaPorId.sql" />
     <EmbeddedResource Include="Scripts\PessoaFisica\PegarPessoasFisicas.sql" />
     <EmbeddedResource Include="Scripts\PessoaJuridica\GuardarPessoaJuridica.sql" />
     <EmbeddedResource Include="Scripts\PessoaJuridica\PegarPessoasJuridicas.sql" />
