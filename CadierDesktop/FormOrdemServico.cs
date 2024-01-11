@@ -404,7 +404,7 @@ namespace CadierDesktop
 
                         if (dateTimeInicio.Value < dateTimeMensalidade.Value)
                         {
-                            int valorMensal = radioPFisica.Checked ? 9 : 7;
+                            int valorMensal = radioPFisica.Checked ? 10 : 10;
                             lblValor.Text = "Valor à Acrescentar: " + ((((dateTimeMensalidade.Value.Year - dateTimeInicio.Value.Year) * 12) + dateTimeMensalidade.Value.Month - dateTimeInicio.Value.Month) * valorMensal).ToString();
                         }
                         else
@@ -428,7 +428,7 @@ namespace CadierDesktop
         {
             if (dateTimeInicio.Value < dateTimeMensalidade.Value)
             {
-                int valorMensal = radioPFisica.Checked ? 9 : 7;
+                int valorMensal = radioPFisica.Checked ? 10 : 10;
                 lblValor.Text = "Valor à Acrescentar: " + ((((dateTimeMensalidade.Value.Year - dateTimeInicio.Value.Year) * 12) + dateTimeMensalidade.Value.Month - dateTimeInicio.Value.Month) * valorMensal).ToString();
             } else
             {
