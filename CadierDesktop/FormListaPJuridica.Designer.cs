@@ -44,6 +44,7 @@ namespace CadierDesktop
             this.label3 = new System.Windows.Forms.Label();
             this.txtNomePrPresidente = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
+            this.btnGerarListaIgrejasFiliadasAtivas = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // listViewPJuridica
@@ -159,11 +160,23 @@ namespace CadierDesktop
             this.label4.TabIndex = 11;
             this.label4.Text = "Nome do Pr Presidente";
             // 
+            // btnGerarListaIgrejasFiliadasAtivas
+            // 
+            this.btnGerarListaIgrejasFiliadasAtivas.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnGerarListaIgrejasFiliadasAtivas.Location = new System.Drawing.Point(358, 587);
+            this.btnGerarListaIgrejasFiliadasAtivas.Name = "btnGerarListaIgrejasFiliadasAtivas";
+            this.btnGerarListaIgrejasFiliadasAtivas.Size = new System.Drawing.Size(206, 23);
+            this.btnGerarListaIgrejasFiliadasAtivas.TabIndex = 29;
+            this.btnGerarListaIgrejasFiliadasAtivas.Text = "Gerar Lista de Igrejas Filiadas Ativas";
+            this.btnGerarListaIgrejasFiliadasAtivas.UseVisualStyleBackColor = true;
+            this.btnGerarListaIgrejasFiliadasAtivas.Click += new System.EventHandler(this.btnGerarListaIgrejasFiliadasAtivas_Click);
+            // 
             // FormListaPJuridica
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(924, 611);
+            this.Controls.Add(this.btnGerarListaIgrejasFiliadasAtivas);
             this.Controls.Add(this.txtNomePrPresidente);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.txtIdPFisicaPresidente);
@@ -197,5 +210,6 @@ namespace CadierDesktop
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txtNomePrPresidente;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button btnGerarListaIgrejasFiliadasAtivas;
     }
 }

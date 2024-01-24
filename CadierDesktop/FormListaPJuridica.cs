@@ -1,4 +1,5 @@
-﻿using CadierBiblioteca.ModelosAtuais;
+﻿using CadierBiblioteca.Enums;
+using CadierBiblioteca.ModelosAtuais;
 using CadierBiblioteca.Utilitarios;
 using CadierDesktop.Utilitarios;
 using Newtonsoft.Json;
@@ -104,6 +105,14 @@ namespace CadierDesktop
             listViewPJuridica.Items.Clear();
             listViewPJuridica.Items.AddRange(_pjuridicas.Where(i => i.PFisicaPresidente != null && (string.IsNullOrEmpty(txtNomePrPresidente.Text) || i.PFisicaPresidente.Nome.ToString().Contains(txtNomePrPresidente.Text)))
                 .Select(c => new ListViewItem(new[] { c.IdPJuridica.ToString(), c.Nome, c.PFisicaPresidente?.IdPFisica.ToString(), c.PFisicaPresidente?.Nome, c.Endereco?.Bairro, c.Endereco?.Cidade })).ToArray());
+        }
+
+        private void btnGerarListaIgrejasFiliadasAtivas_Click(object sender, EventArgs e)
+        {
+            var nomesAtivos = new Queue<string>(_pjuridicas
+                .Where(x => x.SituacaoCadastral.EFiliado && x.SituacaoCadastral.Condicao == CondicaoEnum.Ativo).OrderBy(x => x.Nome)
+                .Select(x => x.IdPJuridica + " - " + x.Nome));
+            ArquivoUtil.GerarArquivoTexto(nomesAtivos);
         }
 
         private void listViewPJuridica_DoubleClick(object sender, EventArgs e)
