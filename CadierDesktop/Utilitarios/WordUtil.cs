@@ -91,15 +91,30 @@ namespace CadierDesktop.Utilitarios
                                         txt.Text = txt.Text.Replace("IdPFisica", pfisicas[i].IdPFisica.ToString());
                                         if (pfisicas[i].Endereco != null)
                                         {
-                                            txt.Text = txt.Text.Replace("cidade", pfisicas[i].Endereco.Cidade);
-                                            txt.Text = txt.Text.Replace("estado", pfisicas[i].Endereco.Estado);
+                                            if(txt.Text.Equals("cidade"))
+                                                txt.Text = txt.Text.Replace("cidade", pfisicas[i].Endereco.Cidade);
+
+                                            if (txt.Text.Equals("estado"))
+                                                txt.Text = txt.Text.Replace("estado", pfisicas[i].Endereco.Estado);
                                         }
-                                        txt.Text = txt.Text.Replace("nome", pfisicas[i].Nome.ToUpper());
-                                        txt.Text = txt.Text.Replace("cargo", cargo.ToUpper());//pfisicas[i].Cargo.ToString());
-                                        txt.Text = txt.Text.Replace("rg", pfisicas[i].Info != null ? pfisicas[i].Info.Rg : null);
-                                        txt.Text = txt.Text.Replace("telefone", pfisicas[i].Telefone1);
-                                        txt.Text = txt.Text.Replace("Igreja", pfisicas[i].IdPJuridica != null ? pfisicas[i].IdPJuridica.Nome : null);
-                                        txt.Text = txt.Text.Replace("Val", DateTime.Now.AddYears(1).ToString("dd/MM/yyyy"));
+
+                                        if (txt.Text.Equals("nome"))
+                                            txt.Text = txt.Text.Replace("nome", pfisicas[i].Nome.ToUpper());
+
+                                        if (txt.Text.Equals("cargo"))
+                                            txt.Text = txt.Text.Replace("cargo", cargo.ToUpper());
+
+                                        if (txt.Text.Equals("rg"))
+                                            txt.Text = txt.Text.Replace("rg", pfisicas[i].Info?.Rg);
+
+                                        if (txt.Text.Equals("telefone"))
+                                            txt.Text = txt.Text.Replace("telefone", pfisicas[i].Telefone1);
+
+                                        if (txt.Text.Equals("Igreja"))
+                                            txt.Text = txt.Text.Replace("Igreja", pfisicas[i].IdPJuridica?.Nome);
+
+                                        if (txt.Text.Equals("Val"))
+                                            txt.Text = txt.Text.Replace("Val", DateTime.Now.AddYears(1).ToString("dd/MM/yyyy"));
 
                                         txtProximo.Text = txtProximo != null ? txtProximo.Text.Replace(index.ToString(), "") : "";
                                     }
