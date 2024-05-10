@@ -6,7 +6,7 @@ namespace Cadier.Abstractions.Interfaces.Repositories
     public interface IPessoaFisicaRepository
     {
         Task<PFisica> PegarPessoaFisicaPorIdAsync(int id);
-        Task<IEnumerable<PFisica>> PegarPessoasFisicasAsync(CondicaoEnum condicaoEnum);
+        Task<IEnumerable<PFisica>> PegarPessoasFisicasComFiltrosAsync(PFisica pfisica);
         Task<int?> GuardarPessoaFisicaAsync(PFisica pfisica);
         Task<PFisica> AlterarPessoaFisicaAsync(PFisica pfisica);
     }

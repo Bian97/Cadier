@@ -8,6 +8,7 @@ using Cadier.DB.Sessions;
 using Cadier.DB.Scripts.PFisica;
 using Cadier.Model.Enums;
 using Dapper;
+using Cadier.Model;
 
 namespace Cadier.DB.Repositories
 {
@@ -38,9 +39,31 @@ namespace Cadier.DB.Repositories
             return await _dbSession.QueryFirstOrDefaultAsync<PFisica>(PessoaFisicaConstants.PegarPessoaFisicaPorId, new DynamicParameters(new { Id = id }));
         }
 
-        public async Task<IEnumerable<PFisica>> PegarPessoasFisicasAsync(CondicaoEnum condicaoEnum)
+        public async Task<IEnumerable<PFisica>> PegarPessoasFisicasComFiltrosAsync(PFisica pfisica)
         {
-            return await _dbSession.QueryAsync<PFisica>(PessoaFisicaConstants.PegarPessoasFisicas, new DynamicParameters(new { Condicao = (int)condicaoEnum }));
+            return await _dbSession.QueryAsync<PFisica, Endereco, SituacaoCadastral, PJuridica, Atendente>(PessoaFisicaConstants.PegarPessoasFisicas,
+                (pFisica, endereco, situacaoCadastral, idPJuridica, atendente) =>
+                {
+                    // Aqui você pode realizar o mapeamento personalizado, se necessário
+                    pFisica.Endereco = endereco;
+                    pFisica.SituacaoCadastral = situacaoCadastral;
+                    pFisica.PessoaJuridica = idPJuridica;
+                    pFisica.Atendente = atendente;
+                    return pFisica;
+                }
+                , new string[] { "IdPFisica", "IdEndereco", "IdSituacaoCadastral", "IdPJuridica", "IdAtendente" },
+                new DynamicParameters(new 
+                { 
+                    pfisica.IdPFisica,
+                    pfisica.DocumentoIdentificacaoSocial,
+                    pfisica.PessoaJuridica.IdPJuridica,
+                    NomePessoaJuridica = pfisica.PessoaJuridica.Nome,
+                    pfisica.Endereco.Cidade,
+                    pfisica.Endereco.Estado,
+                    pfisica.Endereco.Pais,
+                    pfisica.SituacaoCadastral.Condicao,
+                    Filiado = pfisica.SituacaoCadastral.EFiliado
+                }));
         }        
     }
 }

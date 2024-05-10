@@ -11,6 +11,7 @@ using Cadier.Business;
 using Cadier.DB.Repositories;
 using Cadier.Abstractions.Interfaces.Repositories;
 using Microsoft.OpenApi.Models;
+using AutoMapper;
 
 namespace Cadier.Core
 {
@@ -79,6 +80,8 @@ namespace Cadier.Core
                 });
             });
 
+            
+
             services.AddSingleton(
                 new BancoConfig() 
                 { 
@@ -113,5 +116,7 @@ namespace Cadier.Core
 
             return services;
         }
+
+       
     }
 }

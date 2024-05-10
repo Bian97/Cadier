@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
@@ -15,6 +15,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.5.0" />
   </ItemGroup>
 
+    <ItemGroup>
+	    <Folder Include="ViewModels\PessoaFisicaViewModels\" />
+    </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Cadier.Core\Cadier.Core.csproj" />
     <ProjectReference Include="..\Cadier.Model\Cadier.Model.csproj" />

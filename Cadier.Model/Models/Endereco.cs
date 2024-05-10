@@ -9,6 +9,7 @@ namespace Cadier.Model.Models
     public class Endereco
     {
         public int? Id { get; set; }
+        public int? IdEndereco { get; set; }
 
         //[JsonProperty("logradouro")]
         public string Rua { get; set; }

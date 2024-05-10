@@ -27,7 +27,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cadier.Business", "Cadier.B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cadier.Model", "Cadier.Model\Cadier.Model.csproj", "{CBE30ACF-C01C-4252-9698-EA8C87D1D459}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cadier.API", "CadierAPI\Cadier.API.csproj", "{29153F47-9AA0-4B9B-ADCA-C4B8A9F281BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cadier.API", "Cadier.API\Cadier.API.csproj", "{29153F47-9AA0-4B9B-ADCA-C4B8A9F281BA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

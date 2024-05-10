@@ -119,6 +119,26 @@ namespace Cadier.DB.Sessions
         }
 
         private string? GetCurrentCulture()
-            => _httpContextAccessor.HttpContext?.Request?.Cookies[".AspNetCore.Culture"]?.Split('=').LastOrDefault();    
+            => _httpContextAccessor.HttpContext?.Request?.Cookies[".AspNetCore.Culture"]?.Split('=').LastOrDefault();
+
+        public async Task<IEnumerable<T1>> QueryAsync<T1, T2, T3, T4, T5>(string query, Func<T1, T2, T3, T4, T5, T1> map, string[] splitOn, DynamicParameters? parameters = null)
+        {
+            query = await PegarQueryArquivo(query);
+            parameters ??= new DynamicParameters();
+            parameters.Add("SiglaIdioma", GetCurrentCulture() ?? "pt-BR");
+
+            var results = await _connection.QueryAsync<T1, T2, T3, T4, T5, T1>(
+                    query,
+                    (objA, objB, objC, objD, objE) =>
+                    {                        
+                        return map(objA, objB, objC, objD, objE);
+                    },
+                    parameters,
+                    splitOn: string.Join(",", splitOn),
+                    commandTimeout: _bancoConfig.TimeOut
+                );
+
+            return results;
+        }
     }
 }

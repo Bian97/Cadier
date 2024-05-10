@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Authorization;
 using Cadier.Model.Models;
 using Cadier.Model.Enums;
 using Cadier.Abstractions.Interfaces.Services;
+using Cadier.API.ViewModels.PessoaFisicaViewModels;
+using AutoMapper;
 
 namespace Cadier.API.Controllers
 {
@@ -14,17 +16,19 @@ namespace Cadier.API.Controllers
     {
         private readonly ILogger<PessoaFisicaController> _logger;
         private readonly IPessoaFisicaService _pessoaFisicaService;
+        private readonly IMapper _mapper;
 
-        public PessoaFisicaController(ILogger<PessoaFisicaController> logger, IPessoaFisicaService pfisicaService)
+        public PessoaFisicaController(ILogger<PessoaFisicaController> logger, IPessoaFisicaService pfisicaService, IMapper mapper)
         {
             _logger = logger;
             _pessoaFisicaService = pfisicaService;
+            _mapper = mapper;
         }
 
-        [HttpGet("GetPFisicas/{Condicao}", Name = "GetPFisicas")]
-        public async Task<ActionResult> Index(CondicaoEnum condicaoEnum)
+        [HttpGet("GetPFisicas", Name = "GetPFisicas")]
+        public async Task<ActionResult> Index([FromQuery]GetFiliadosToGridViewModel filters)
         {
-            var pfisicas = await _pessoaFisicaService.PegarPessoasFisicas(condicaoEnum);
+            var pfisicas = await _pessoaFisicaService.PegarPessoasFisicas(_mapper.Map<GetFiliadosToGridViewModel, PFisica>(filters));
             if(pfisicas == null) return NotFound();
             return Ok(pfisicas);
         }

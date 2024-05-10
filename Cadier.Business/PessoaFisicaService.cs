@@ -2,6 +2,7 @@
 using Cadier.Abstractions.Interfaces.Services;
 using Cadier.Model.Enums;
 using Cadier.Model.Models;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Cadier.Business
@@ -35,9 +36,9 @@ namespace Cadier.Business
             return await _pessoaFisicaRepository.PegarPessoaFisicaPorIdAsync(id);
         }
 
-        public async Task<IEnumerable<PFisica>> PegarPessoasFisicas(CondicaoEnum condicaoEnum)
+        public async Task<IEnumerable<PFisica>> PegarPessoasFisicas(PFisica pfisica)
         {
-            return await _pessoaFisicaRepository.PegarPessoasFisicasAsync(condicaoEnum);
+            return await _pessoaFisicaRepository.PegarPessoasFisicasComFiltrosAsync(pfisica);
         }
 
         public async Task<bool> LoginPessoaFisicaAsync(string documento, int numero)
