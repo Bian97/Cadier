@@ -40,8 +40,3 @@
         AND (@Condicao IS NULL OR sc.Condicao = @Condicao)
         AND (@Filiado IS NULL OR sc.EFiliado = @Filiado)
     ORDER BY pf.Nome
-    --LEFT JOIN InfosPessoas_INF inf (nolock) on pf.IdPFisica = inf.IdPFisica 
-    
-    --LEFT JOIN PessoaJuridica_PJU pj (nolock) ON pf.IdPJuridica = pj.IdPJuridica 
-    --WHERE (@Condicao IS NULL OR  sc.Condicao = @Condicao)
-    --GROUP BY pf.IdPFisica;

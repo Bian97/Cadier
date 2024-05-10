@@ -7,6 +7,30 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\camera.png" />
+    <None Remove="Resources\Certificado_Consagracao.docx" />
+    <None Remove="Resources\Credencial_Juridica.docx" />
+    <None Remove="Resources\PVC_Cinza.docx" />
+    <None Remove="Resources\PVC_Cinza_Dupla.docx" />
+    <None Remove="Resources\PVC_Cinza_Quarteto.docx" />
+    <None Remove="Resources\PVC_Verde.docx" />
+    <None Remove="Resources\PVC_Verde_Dupla.docx" />
+    <None Remove="Resources\PVC_Verde_Quarteto.docx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\camera.png" />
+    <EmbeddedResource Include="Resources\Certificado_Consagracao.docx" />
+    <EmbeddedResource Include="Resources\Credencial_Juridica.docx" />
+    <EmbeddedResource Include="Resources\PVC_Cinza.docx" />
+    <EmbeddedResource Include="Resources\PVC_Cinza_Dupla.docx" />
+    <EmbeddedResource Include="Resources\PVC_Cinza_Quarteto.docx" />
+    <EmbeddedResource Include="Resources\PVC_Verde.docx" />
+    <EmbeddedResource Include="Resources\PVC_Verde_Dupla.docx" />
+    <EmbeddedResource Include="Resources\PVC_Verde_Quarteto.docx" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.10" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />

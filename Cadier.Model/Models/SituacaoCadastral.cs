@@ -1,7 +1,5 @@
 ﻿using Cadier.Model.Enums;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Cadier.Model.Models
 {

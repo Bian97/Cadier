@@ -25,7 +25,6 @@ namespace Cadier.Business
         {
             pfisica.Telefone1 = !string.IsNullOrEmpty(pfisica.Telefone1) ? Regex.Replace(pfisica.Telefone1, "[^0-9]", "") : null;
             pfisica.Telefone2 = !string.IsNullOrEmpty(pfisica.Telefone2) ? Regex.Replace(pfisica.Telefone2, "[^0-9]", "") : null;
-            pfisica.Cpf = !string.IsNullOrEmpty(pfisica.Cpf) ? Regex.Replace(pfisica.Cpf, "[^0-9]", "") : null;
             pfisica.DocumentoIdentificacaoSocial = !string.IsNullOrEmpty(pfisica.DocumentoIdentificacaoSocial) ? Regex.Replace(pfisica.DocumentoIdentificacaoSocial, "[^0-9]", "") : null;
             pfisica.Rg = !string.IsNullOrEmpty(pfisica.Rg) ? Regex.Replace(pfisica.Rg, "[^0-9]", "") : null;
             return await _pessoaFisicaRepository.GuardarPessoaFisicaAsync(pfisica);

@@ -1,5 +1,4 @@
 ﻿using Cadier.Model.Enums;
-using Cadier.Model.Interfaces;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -7,12 +6,9 @@ using System.Text;
 
 namespace Cadier.Model.Models
 {
-    public class PFisica : IInfoBasicas
+    public class PFisica
     {
         public int IdPFisica { get; set; }
-        public int IdAtendente { get; set; }
-        public int? IdEndereco { get; set; }
-        public int? IdSituacaoCadastral { get; set; }
         public string Profissao { get; set; }
         public string Email { get; set; }
         public string Telefone1 { get; set; }
@@ -25,15 +21,11 @@ namespace Cadier.Model.Models
         public string Filiacao { get; set; }
         public string ApresentouConv { get; set; }
         public string Indicacao { get; set; }
-        public PJuridica IdPJuridica { get; set; }
         public PJuridica PessoaJuridica { get; set; }
-        public int? IdPessoaJuridica { get; set; }
         public string Foto { get; set; }
         public string Nome { get; set; }
-        public string Cpf { get; set; }
         public string DocumentoIdentificacaoSocial { get; set; }
         public string Rg { get; set; }
-        public Infos Info { get; set; }
         public Endereco Endereco { get; set; }
         public Atendente Atendente { get; set; }
         public SituacaoCadastral SituacaoCadastral { get; set; }
