@@ -30,9 +30,9 @@
     LEFT JOIN Endereco_END en (nolock) on en.[IdEnd] = pf.[IdEnd]
     LEFT JOIN SituacaoCadastral_SIT sc (nolock) on sc.[IdSit] = pf.[IdSit]
     WHERE 
-        (@IdPFisica IS NULL OR pf.[IdPfi] = @IdPFisica)
+        ((@IdPFisica = 0 OR @IdPFisica IS NULL) OR pf.[IdPfi] = @IdPFisica)
         AND (@DocumentoIdentificacaoSocial IS NULL OR pf.[DocumentoIdentificacaoSocial] LIKE '%' + @DocumentoIdentificacaoSocial + '%')
-        AND (@IdPJuridica = 0 OR pf.[IdPju] = @IdPJuridica)
+        AND ((@IdPJuridica = 0 OR @IdPJuridica IS NULL) OR pf.[IdPju] = @IdPJuridica)
         AND (@NomePessoaJuridica IS NULL OR pj.[Nome] LIKE '%' + @NomePessoaJuridica + '%')
         AND (@Cidade IS NULL OR en.Cidade LIKE '%' + @Cidade + '%')
         AND (@Estado IS NULL OR en.Estado LIKE '%' + @Estado + '%')
